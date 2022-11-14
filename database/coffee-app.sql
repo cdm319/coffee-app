@@ -1,3 +1,8 @@
+/*
+ Coffee App Database Structure
+ Intended for PostgresSQL on AWS RDS
+ */
+
 --
 -- Create database
 --
