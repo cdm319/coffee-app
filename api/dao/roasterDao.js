@@ -39,4 +39,22 @@ const getRoasterById = async (id) => {
         });
 };
 
-export { getAllRoasters, getRoasterById };
+const createRoaster = async (roaster) => {
+    const db = new Client(dbConfig);
+    db.connect();
+
+    const query = {
+        name: 'createRoaster',
+        text: 'INSERT INTO roaster (name, url, country, created_by, created) VALUES ($1, $2, $3, 1, NOW()) RETURNING id',
+        values: [roaster.name, roaster.url, roaster.country]
+    };
+
+    return db
+        .query(query)
+        .then(res => {
+            db.end();
+            return res.rows[0];
+        });
+};
+
+export { getAllRoasters, getRoasterById, createRoaster };

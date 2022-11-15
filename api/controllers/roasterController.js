@@ -1,5 +1,5 @@
-import { getAllRoasters, getRoasterById } from '../dao/roasterDao';
-import { isValidId } from "../utils/validation";
+import { getAllRoasters, getRoasterById, createRoaster } from '../dao/roasterDao';
+import { isValidId, isValidRoaster } from "../utils/validation";
 
 const getAllRoastersController = async (req, res) => {
     const result = await getAllRoasters();
@@ -18,4 +18,16 @@ const getRoasterByIdController = async (req, res, next) => {
     }
 };
 
-export { getAllRoastersController, getRoasterByIdController };
+const createRoasterController = async (req, res, next) => {
+    const roaster = req.body;
+
+    if (isValidRoaster(roaster)) {
+        const result = await createRoaster(roaster); // returns {id}
+
+        res.status(201).send();
+    } else {
+        next();
+    }
+};
+
+export { getAllRoastersController, getRoasterByIdController, createRoasterController };

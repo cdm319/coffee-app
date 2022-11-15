@@ -1,5 +1,5 @@
 import express from 'express';
-import { healthController, getAllCoffeeController, getCoffeeByIdController, getAllRoastersController, getRoasterByIdController } from '../controllers';
+import { healthController, getAllCoffeeController, getCoffeeByIdController, getAllRoastersController, getRoasterByIdController, createRoasterController } from '../controllers';
 
 const router = express.Router();
 
@@ -11,5 +11,6 @@ router.get("/coffee/:id", getCoffeeByIdController);
 
 router.get("/roasters", getAllRoastersController);
 router.get("/roaster/:id", getRoasterByIdController);
+router.post("/roaster", createRoasterController);
 
 export default router;
