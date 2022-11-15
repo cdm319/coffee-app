@@ -9,25 +9,25 @@ const dbConfig = {
     database: 'coffee-app'
 };
 
-const getAllCoffee = async () => {
+const getAllRoasters = async () => {
     const db = new Client(dbConfig);
     db.connect();
 
     return db
-        .query("SELECT c.id, r.name as roaster, c.name as coffee, c.avg_rating, c.num_reviews FROM coffee c LEFT JOIN roaster r ON r.id = c.roaster_id ORDER BY roaster ASC, coffee ASC;")
+        .query("SELECT * FROM roaster")
         .then(res => {
             db.end();
             return res.rows;
         });
 };
 
-const getCoffeeById = async (id) => {
+const getRoasterById = async (id) => {
     const db = new Client(dbConfig);
     db.connect();
 
     const query = {
-        name: 'getCoffeeById',
-        text: 'SELECT * FROM coffee WHERE id = $1',
+        name: 'getRoasterById',
+        text: 'SELECT * FROM roaster WHERE id = $1',
         values: [id]
     };
 
@@ -39,4 +39,4 @@ const getCoffeeById = async (id) => {
         });
 };
 
-export { getAllCoffee, getCoffeeById };
+export { getAllRoasters, getRoasterById };

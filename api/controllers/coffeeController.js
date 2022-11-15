@@ -1,22 +1,21 @@
 import { getAllCoffee, getCoffeeById } from '../dao/coffeeDao';
+import { isValidId } from '../utils/validation';
 
 const getAllCoffeeController = async (req, res) => {
-    const coffeeRes = await getAllCoffee();
+    const result = await getAllCoffee();
 
-    console.log(coffeeRes);
-
-    res.json(coffeeRes);
+    res.json(result);
 }
 
-const getCoffeeByIdController = async (req, res) => {
-    const coffeeRes = await getCoffeeById(req.params.id);
+const getCoffeeByIdController = async (req, res, next) => {
+    const coffeeId = req.params.id;
 
-    console.log(coffeeRes);
-
-    res.json(coffeeRes);
-}
-
-export {
-    getAllCoffeeController,
-    getCoffeeByIdController
+    if (isValidId(coffeeId)) {
+        const result = await getCoffeeById(coffeeId);
+        res.json(result);
+    } else {
+        next();
+    }
 };
+
+export { getAllCoffeeController, getCoffeeByIdController };

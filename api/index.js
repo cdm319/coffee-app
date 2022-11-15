@@ -1,5 +1,4 @@
 import express from 'express';
-import bodyParser from "body-parser";
 import routes from './routes';
 
 const app = express();
@@ -8,7 +7,7 @@ const app = express();
 app.disable("x-powered-by");
 
 // Config
-app.use(bodyParser.json());
+app.use(express.json());
 
 // Set up API routes and default to 404
 app.use(routes);
@@ -18,5 +17,3 @@ app.use((req, res) => res.sendStatus(404));
 app.listen(3000, () => {
     console.log("Coffee App API running...");
 });
-
-export default app;
