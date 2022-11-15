@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from "body-parser";
-import router from './routes';
+import routes from './routes';
 
 const app = express();
 
@@ -11,7 +11,7 @@ app.disable("x-powered-by");
 app.use(bodyParser.json());
 
 // Set up API routes and default to 404
-app.use(router);
+app.use(routes);
 app.use((req, res) => res.sendStatus(404));
 
 // Spin up server

@@ -1,5 +1,8 @@
 import healthController from "./healthController";
+import { getAllCoffeeController, getCoffeeByIdController } from "./coffeeController";
 
 export {
-    healthController
+    healthController,
+    getAllCoffeeController,
+    getCoffeeByIdController
 };
