@@ -1,5 +1,6 @@
-import { getAllCoffee, getCoffeeById } from '../dao/coffeeDao';
-import { isValidId } from '../utils/validation';
+import { getAllCoffee, getCoffeeById, createCoffee } from '../dao/coffeeDao';
+import {isValidCoffee, isValidId, isValidRoaster} from '../utils/validation';
+import {createRoaster} from "../dao/roasterDao.js";
 
 const getAllCoffeeController = async (req, res) => {
     const result = await getAllCoffee();
@@ -18,4 +19,41 @@ const getCoffeeByIdController = async (req, res, next) => {
     }
 };
 
-export { getAllCoffeeController, getCoffeeByIdController };
+const createCoffeeController = async (req, res, next) => {
+    const coffee = req.body;
+
+    if (isValidCoffee(coffee)) {
+        const result = await createCoffee(coffee); // returns {id}
+
+        res.status(201).send();
+    } else {
+        next();
+    }
+};
+
+const createCoffeeAndRoasterController = async (req, res, next) => {
+    const { coffee, roaster } = req.body;
+
+    if (isValidRoaster(roaster)) {
+        const roasterResult = await createRoaster(roaster);
+
+        coffee.roasterId = roasterResult.id;
+
+        if (isValidCoffee(coffee)) {
+            const coffeeResult = await createCoffee(coffee);
+
+            res.status(201).send();
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+};
+
+export {
+    getAllCoffeeController,
+    getCoffeeByIdController,
+    createCoffeeController,
+    createCoffeeAndRoasterController
+};

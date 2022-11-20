@@ -39,4 +39,22 @@ const getCoffeeById = async (id) => {
         });
 };
 
-export { getAllCoffee, getCoffeeById };
+const createCoffee = async (coffee) => {
+    const db = new Client(dbConfig);
+    db.connect();
+
+    const query = {
+        name: 'createCoffee',
+        text: 'INSERT INTO coffee (name, roaster_id, url, photo, roast_type, best_for, origin, country, tasting_notes, created_by, created) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 1, NOW()) RETURNING id',
+        values: [coffee.name, coffee.roasterId, coffee.url, coffee.photo, coffee.roastType, coffee.bestFor, coffee.origin, coffee.country, coffee.tastingNotes]
+    };
+
+    return db
+        .query(query)
+        .then(res => {
+            db.end();
+            return res.rows[0];
+        });
+};
+
+export { getAllCoffee, getCoffeeById, createCoffee };
