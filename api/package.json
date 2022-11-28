@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node --experimental-specifier-resolution=node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha '*/**/*.test.js --ignore node_modules/**/*'"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,11 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^10.1.0",
+    "sinon": "^14.0.2"
   }
 }

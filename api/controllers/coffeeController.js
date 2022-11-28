@@ -1,6 +1,6 @@
 import { getAllCoffee, getCoffeeById, createCoffee } from '../dao/coffeeDao';
 import {isValidCoffee, isValidId, isValidRoaster} from '../utils/validation';
-import {createRoaster} from "../dao/roasterDao.js";
+import {createRoaster} from "../dao/roasterDao";
 
 const getAllCoffeeController = async (req, res) => {
     const result = await getAllCoffee();

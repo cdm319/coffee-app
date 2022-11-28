@@ -35,7 +35,7 @@ const getCoffeeById = async (id) => {
         .query(query)
         .then(res => {
             db.end();
-            return res.rows;
+            return res.rows[0];
         });
 };
 
