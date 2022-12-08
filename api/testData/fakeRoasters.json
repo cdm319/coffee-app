@@ -1,0 +1,9 @@
+{
+  "id": 1,
+  "name": "My Roaster",
+  "url": "https://myroaster.com",
+  "photo": "img/roaster/myroaster.jpg",
+  "country": "United Kingdom",
+  "created_by": 1,
+  "created": "2022-12-08 19:08:00.000000"
+}
