@@ -1,5 +1,5 @@
 const healthController = async (req, res) => {
-    res.send();
+    return res.send();
 };
 
 export default healthController;

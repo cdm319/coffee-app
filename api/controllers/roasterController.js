@@ -1,10 +1,10 @@
-import { getAllRoasters, getRoasterById, createRoaster } from '../dao/roasterDao';
-import { isValidId, isValidRoaster } from "../utils/validation";
+import { getAllRoasters, getRoasterById, createRoaster } from '../dao/roasterDao.js';
+import { isValidId, isValidRoaster } from '../utils/validation.js';
 
 const getAllRoastersController = async (req, res) => {
     const result = await getAllRoasters();
 
-    res.json(result);
+    return res.json(result);
 };
 
 const getRoasterByIdController = async (req, res, next) => {
@@ -12,9 +12,9 @@ const getRoasterByIdController = async (req, res, next) => {
 
     if (isValidId(roasterId)) {
         const result = await getRoasterById(roasterId);
-        res.json(result);
+        return res.json(result);
     } else {
-        next();
+        return next();
     }
 };
 
@@ -24,9 +24,9 @@ const createRoasterController = async (req, res, next) => {
     if (isValidRoaster(roaster)) {
         const result = await createRoaster(roaster); // returns {id}
 
-        res.status(201).send();
+        return res.status(201).send();
     } else {
-        next();
+        return next();
     }
 };
 
