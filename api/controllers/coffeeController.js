@@ -2,10 +2,11 @@ import { getAllCoffee, getCoffeeById, createCoffee } from '../dao/coffeeDao';
 import {isValidCoffee, isValidId, isValidRoaster} from '../utils/validation';
 import {createRoaster} from "../dao/roasterDao";
 
+// TODO - error handling for DAO
 const getAllCoffeeController = async (req, res) => {
     const result = await getAllCoffee();
 
-    res.json(result);
+    return res.json(result);
 }
 
 const getCoffeeByIdController = async (req, res, next) => {
@@ -13,9 +14,9 @@ const getCoffeeByIdController = async (req, res, next) => {
 
     if (isValidId(coffeeId)) {
         const result = await getCoffeeById(coffeeId);
-        res.json(result);
+        return res.json(result);
     } else {
-        next();
+        return next();
     }
 };
 
@@ -25,9 +26,9 @@ const createCoffeeController = async (req, res, next) => {
     if (isValidCoffee(coffee)) {
         const result = await createCoffee(coffee); // returns {id}
 
-        res.status(201).send();
+        return res.status(201).send();
     } else {
-        next();
+        return next();
     }
 };
 
@@ -42,12 +43,12 @@ const createCoffeeAndRoasterController = async (req, res, next) => {
         if (isValidCoffee(coffee)) {
             const coffeeResult = await createCoffee(coffee);
 
-            res.status(201).send();
+            return res.status(201).send();
         } else {
-            next();
+            return next();
         }
     } else {
-        next();
+        return next();
     }
 };
 

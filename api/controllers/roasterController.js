@@ -1,6 +1,7 @@
 import { getAllRoasters, getRoasterById, createRoaster } from '../dao/roasterDao.js';
 import { isValidId, isValidRoaster } from '../utils/validation.js';
 
+// TODO - error handling for DAO
 const getAllRoastersController = async (req, res) => {
     const result = await getAllRoasters();
 
