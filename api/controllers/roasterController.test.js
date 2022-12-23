@@ -1,38 +1,44 @@
-import sinon from 'sinon';
-import { expect } from 'chai';
+import { jest } from '@jest/globals';
 
-import { getAllRoastersController, getRoasterByIdController, createRoasterController } from "./roasterController.js";
-import * as roasterDao from '../dao/roasterDao.js';
 import fakeRoasters from '../testData/fakeRoasters.json' assert { type: 'json' };
-
 
 let req, res, next;
 
+jest.unstable_mockModule('../dao/roasterDao.js', () => ({
+    getAllRoasters: jest.fn().mockReturnValue([Object.assign({}, fakeRoasters)]),
+    getRoasterById: jest.fn().mockReturnValue([Object.assign({}, fakeRoasters)]),
+    createRoaster: jest.fn().mockReturnValue({ id:100 })
+}));
+
+const { getAllRoasters, getRoasterById, createRoaster } = await import('../dao/roasterDao.js');
+const { getAllRoastersController, getRoasterByIdController, createRoasterController } = await import('./roasterController.js');
+
 describe('Roaster Controller', () => {
     beforeEach(() => {
-        req = sinon.stub();
+        req = jest.fn();
 
         res = {
-            status: sinon.stub().returns(res),
-            json: sinon.stub().returns(res),
-            send: sinon.stub().returns(res)
+            status: jest.fn(),
+            json: jest.fn(),
+            send: jest.fn()
         };
 
-        next = sinon.stub().returns(next);
+        next = jest.fn().mockReturnValue(next)
     });
 
-    afterEach(() => {
-        sinon.restore();
+    afterAll(() => {
+        jest.clearAllMocks();
     })
 
     describe('getAllRoastersController', () => {
-        it('should ...', async () => {
-            const daoStub = sinon.stub(roasterDao, 'getAllRoasters').returns([Object.assign({}, fakeRoasters)]);
+        it('should call roasterDao and send response', async () => {
+            res.json.mockReturnValue(res);
 
             const result = await getAllRoastersController(req, res);
 
-            expect(daoStub.calledOnce).to.be.true;
-            expect(result).to.deep.equal(res);
+            expect(getAllRoasters).toHaveBeenCalledTimes(1);
+            expect(res.json).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
         });
     });
 

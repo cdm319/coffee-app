@@ -1,22 +1,10 @@
-import pg from "pg";
-const { Client } = pg;
-
-const dbConfig = {
-    user: 'coffee-app',
-    password: 'coffeecoffee',
-    host: 'localhost',
-    port: 5432,
-    database: 'coffee-app'
-};
+import db from './db';
 
 const getAllRoasters = async () => {
     try {
-        const db = new Client(dbConfig);
         await db.connect();
 
         const result = await db.query("SELECT * FROM roaster");
-
-        db.end();
 
         return result.rows;
     } catch (e) {
@@ -26,7 +14,6 @@ const getAllRoasters = async () => {
 
 const getRoasterById = async (id) => {
     try {
-        const db = new Client(dbConfig);
         await db.connect();
 
         const result = await db.query({
@@ -34,8 +21,6 @@ const getRoasterById = async (id) => {
             text: 'SELECT * FROM roaster WHERE id = $1',
             values: [id]
         });
-
-        db.end();
 
         return result.rows[0];
     } catch (e) {
@@ -45,7 +30,6 @@ const getRoasterById = async (id) => {
 
 const createRoaster = async (roaster) => {
     try {
-        const db = new Client(dbConfig);
         await db.connect();
 
         const result = await db.query({
@@ -53,8 +37,6 @@ const createRoaster = async (roaster) => {
             text: 'INSERT INTO roaster (name, url, country, created_by, created) VALUES ($1, $2, $3, 1, NOW()) RETURNING id',
             values: [roaster.name, roaster.url, roaster.country]
         });
-
-        db.end();
 
         return result.rows[0];
     } catch (e) {

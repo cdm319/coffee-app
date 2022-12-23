@@ -1,78 +1,80 @@
-import sinon from 'sinon';
-import { expect } from 'chai';
-import pg from 'pg';
+import { jest } from '@jest/globals';
+import db from "./db.js";
 
 import { createRoaster, getAllRoasters, getRoasterById } from './roasterDao.js';
 
 import fakeRoasters from '../testData/fakeRoasters.json' assert { type: 'json' };
+import fakeCoffees from "../testData/fakeCoffees.json";
 
 describe('Roaster DAO', () => {
 
    afterEach(() => {
-       sinon.restore();
+       jest.clearAllMocks();
    });
 
    describe('getAllRoasters', () => {
        it('should return an array of roasters', async () => {
-           sinon.stub(pg.Client.prototype, 'connect');
-           sinon.stub(pg.Client.prototype, 'query').resolves({
-               rows: [Object.assign({}, fakeRoasters)]
+           db.connect = jest.fn().mockReturnThis();
+           db.query = jest.fn().mockReturnValueOnce({
+               rows: [ Object.assign({}, fakeRoasters) ]
            });
 
            const result = await getAllRoasters();
 
-           expect(result).to.be.an('array');
-           expect(result.length).to.equal(1);
-           expect(result[0]).to.deep.equal(fakeRoasters);
+           expect(result.length).toBe(1);
+           expect(result[0]).toEqual(fakeRoasters);
        });
 
        it('should throw an error when something goes wrong with the database', async () => {
-           sinon.stub(pg.Client.prototype, 'connect').throws('SOME HORRIBLE ERROR');
+           db.connect.mockImplementation(() => {
+               throw new Error('Some horrible error');
+           });
 
-           await expect(getAllRoasters()).to.be.rejectedWith('Could not connect to database.');
+           expect(async () => await getAllRoasters()).rejects.toThrow('Could not connect to database.');
        });
    });
 
    describe('getRoasterById', () => {
        it('should return a roaster object', async () => {
-           sinon.stub(pg.Client.prototype, 'connect');
-           sinon.stub(pg.Client.prototype, 'query').resolves({
-               rows: [Object.assign({}, fakeRoasters)]
+           db.connect = jest.fn().mockReturnThis();
+           db.query = jest.fn().mockReturnValueOnce({
+               rows: [ Object.assign({}, fakeRoasters) ]
            });
 
            const result = await getRoasterById(1);
 
-           expect(result).to.be.an('object');
-           expect(result).to.deep.equal(fakeRoasters);
+           expect(result).toEqual(fakeRoasters);
        });
 
        it('should throw an error when something goes wrong with the database', async () => {
-           sinon.stub(pg.Client.prototype, 'connect').throws('SOME HORRIBLE ERROR');
+           db.connect.mockImplementation(() => {
+               throw new Error('Some horrible error');
+           });
 
-           await expect(getRoasterById(1)).to.be.rejectedWith('Could not connect to database.');
+           expect(async () => await getRoasterById(1)).rejects.toThrow('Could not connect to database.');
        });
    });
 
    describe('createRoaster', () => {
        it('should return the id of the inserted roaster', async () => {
-           sinon.stub(pg.Client.prototype, 'connect');
-           const insertStub = sinon.stub(pg.Client.prototype, 'query').resolves({
+           db.connect = jest.fn().mockReturnThis();
+           db.query = jest.fn();
+           db.query.mockReturnValue({
                rows: [ { id: 100 } ]
            });
 
            const result = await createRoaster({});
 
-           expect(insertStub.calledOnce).to.be.true;
-
-           expect(result).to.be.an('object');
-           expect(result).to.haveOwnProperty('id');
-           expect(result.id).to.equal(100);
+           expect(db.query).toHaveBeenCalledTimes(1);
+           expect(result).toEqual({ id: 100 });
        });
 
        it('should throw an error when something goes wrong with the database', async () => {
-           sinon.stub(pg.Client.prototype, 'connect').throws('SOME HORRIBLE ERROR');
+           db.connect.mockImplementation(() => {
+               throw new Error('Some horrible error');
+           });
 
-           await expect(createRoaster({})).to.be.rejectedWith('Could not connect to database.');
+           expect(async () => await createRoaster({})).rejects.toThrow('Could not connect to database.');
        });
    });
 });
