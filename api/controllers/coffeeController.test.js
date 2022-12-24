@@ -145,7 +145,7 @@ describe('Coffee Controller', () => {
             req = { body: { coffee, roaster } };
             next.mockReturnValue(next);
 
-            const result = createCoffeeAndRoasterController(req, res, next);
+            const result = await createCoffeeAndRoasterController(req, res, next);
 
             expect(createRoaster).not.toHaveBeenCalled();
             expect(createCoffee).not.toHaveBeenCalled();
@@ -160,7 +160,7 @@ describe('Coffee Controller', () => {
             req = { body: { coffee, roaster } };
             next.mockReturnValue(next);
 
-            const result = createCoffeeAndRoasterController(req, res, next);
+            const result = await createCoffeeAndRoasterController(req, res, next);
 
             expect(createRoaster).toHaveBeenCalledTimes(1);
             expect(createRoaster).toHaveBeenCalledWith(roaster);
