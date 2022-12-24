@@ -4,7 +4,6 @@ import db from "./db.js";
 import { createRoaster, getAllRoasters, getRoasterById } from './roasterDao.js';
 
 import fakeRoasters from '../testData/fakeRoasters.json' assert { type: 'json' };
-import fakeCoffees from "../testData/fakeCoffees.json";
 
 describe('Roaster DAO', () => {
 
