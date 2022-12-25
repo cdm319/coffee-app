@@ -36,10 +36,21 @@ describe('Roaster Controller', () => {
             expect(result).toEqual(res);
         });
 
-        // TODO error handling test case
-        // it('should send a 500 when roasterDao throws an error', async () => {
-        //
-        // });
+        it('should send a 500 when roasterDao throws an error', async () => {
+            getAllRoasters.mockImplementationOnce(() => {
+                throw new Error('Some horrible error');
+            });
+
+            res.status.mockReturnValue(res);
+            res.send.mockReturnValue(res);
+
+            const result = await getAllRoastersController(req, res, next);
+
+            expect(res.status).toHaveBeenCalledTimes(1);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
+        });
     });
 
     describe('getRoasterByIdController', () => {
@@ -67,10 +78,22 @@ describe('Roaster Controller', () => {
             expect(result).toEqual(next);
         });
 
-        // TODO error handling test case
-        // it('should send a 500 when roasterDao throws an error', async () => {
-        //
-        // });
+        it('should send a 500 when roasterDao throws an error', async () => {
+            getRoasterById.mockImplementationOnce(() => {
+                throw new Error('Some horrible error');
+            });
+
+            req = { params: { id: 100 } };
+            res.status.mockReturnValue(res);
+            res.send.mockReturnValue(res);
+
+            const result = await getRoasterByIdController(req, res, next);
+
+            expect(res.status).toHaveBeenCalledTimes(1);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
+        });
     });
 
     describe('createRoasterController', () => {
@@ -101,9 +124,23 @@ describe('Roaster Controller', () => {
             expect(result).toEqual(next);
         });
 
-        // TODO error handling test case
-        // it('should send a 500 when roasterDao throws an error', async () => {
-        //
-        // });
+        it('should send a 500 when roasterDao throws an error', async () => {
+            createRoaster.mockImplementationOnce(() => {
+                throw new Error('Some horrible error');
+            });
+
+            req = {
+                body: { name: '200 Degrees', url: 'https://200degs.com', country: 'United Kingdom' }
+            };
+            res.status.mockReturnValue(res);
+            res.send.mockReturnValue(res);
+
+            const result = await createRoasterController(req, res, next);
+
+            expect(res.status).toHaveBeenCalledTimes(1);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
+        });
     });
 });

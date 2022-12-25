@@ -1,19 +1,25 @@
 import { getAllRoasters, getRoasterById, createRoaster } from '../dao/roasterDao.js';
 import { isValidId, isValidRoaster } from '../utils/validation.js';
 
-// TODO - error handling for DAO
 const getAllRoastersController = async (req, res) => {
-    const result = await getAllRoasters();
-
-    return res.json(result);
+    try {
+        const result = await getAllRoasters();
+        return res.json(result);
+    } catch (e) {
+        return res.status(500).send();
+    }
 };
 
 const getRoasterByIdController = async (req, res, next) => {
     const roasterId = req.params.id;
 
     if (isValidId(roasterId)) {
-        const result = await getRoasterById(roasterId);
-        return res.json(result);
+        try {
+            const result = await getRoasterById(roasterId);
+            return res.json(result);
+        } catch (e) {
+            return res.status(500).send();
+        }
     } else {
         return next();
     }
@@ -23,9 +29,12 @@ const createRoasterController = async (req, res, next) => {
     const roaster = req.body;
 
     if (isValidRoaster(roaster)) {
-        const result = await createRoaster(roaster); // returns {id}
-
-        return res.status(201).send();
+        try {
+            await createRoaster(roaster);
+            return res.status(201).send();
+        } catch (e) {
+            return res.status(500).send();
+        }
     } else {
         return next();
     }
