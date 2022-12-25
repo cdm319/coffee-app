@@ -2,19 +2,25 @@ import { getAllCoffee, getCoffeeById, createCoffee } from '../dao/coffeeDao';
 import {isValidCoffee, isValidId, isValidRoaster} from '../utils/validation';
 import {createRoaster} from "../dao/roasterDao";
 
-// TODO - error handling for DAO
 const getAllCoffeeController = async (req, res) => {
-    const result = await getAllCoffee();
-
-    return res.json(result);
+    try {
+        const result = await getAllCoffee();
+        return res.json(result);
+    } catch (e) {
+        return res.status(500).send();
+    }
 }
 
 const getCoffeeByIdController = async (req, res, next) => {
     const coffeeId = req.params.id;
 
     if (isValidId(coffeeId)) {
-        const result = await getCoffeeById(coffeeId);
-        return res.json(result);
+        try {
+            const result = await getCoffeeById(coffeeId);
+            return res.json(result);
+        } catch (e) {
+            return res.status(500).send();
+        }
     } else {
         return next();
     }
@@ -24,9 +30,12 @@ const createCoffeeController = async (req, res, next) => {
     const coffee = req.body;
 
     if (isValidCoffee(coffee)) {
-        const result = await createCoffee(coffee); // returns {id}
-
-        return res.status(201).send();
+        try {
+            await createCoffee(coffee);
+            return res.status(201).send();
+        } catch (e) {
+            return res.status(500).send();
+        }
     } else {
         return next();
     }
@@ -36,14 +45,20 @@ const createCoffeeAndRoasterController = async (req, res, next) => {
     const { coffee, roaster } = req.body;
 
     if (isValidRoaster(roaster)) {
-        const roasterResult = await createRoaster(roaster);
-
-        coffee.roasterId = roasterResult.id;
+        try {
+            const roasterResult = await createRoaster(roaster);
+            coffee.roasterId = roasterResult.id;
+        } catch (e) {
+            return res.status(500).send();
+        }
 
         if (isValidCoffee(coffee)) {
-            const coffeeResult = await createCoffee(coffee);
-
-            return res.status(201).send();
+            try {
+                await createCoffee(coffee);
+                return res.status(201).send();
+            } catch (e) {
+                return res.status(500).send();
+            }
         } else {
             return next();
         }

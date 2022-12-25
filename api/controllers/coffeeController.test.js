@@ -43,10 +43,21 @@ describe('Coffee Controller', () => {
             expect(result).toEqual(res);
         });
 
-        // TODO error handling test case
-        // it('should send a 500 when coffeeDao throws an error', async () => {
-        //
-        // });
+        it('should send a 500 when coffeeDao throws an error', async () => {
+            getAllCoffee.mockImplementationOnce(() => {
+                throw new Error('Some horrible error');
+            });
+
+            res.status.mockReturnValue(res);
+            res.send.mockReturnValue(res);
+
+            const result = await getAllCoffeeController(req, res);
+
+            expect(res.status).toHaveBeenCalledTimes(1);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
+        });
     });
 
     describe('getCoffeeByIdController', () => {
@@ -74,10 +85,22 @@ describe('Coffee Controller', () => {
             expect(result).toEqual(next);
         });
 
-        // TODO error handling test case
-        // it('should send a 500 when coffeeDao throws an error', async () => {
-        //
-        // });
+        it('should send a 500 when coffeeDao throws an error', async () => {
+            getCoffeeById.mockImplementationOnce(() => {
+                throw new Error('Some horrible error');
+            });
+
+            req = { params: { id: 100 } };
+            res.status.mockReturnValue(res);
+            res.send.mockReturnValue(res);
+
+            const result = await getCoffeeByIdController(req, res, next);
+
+            expect(res.status).toHaveBeenCalledTimes(1);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
+        });
     });
 
     describe('createCoffeeController', () => {
@@ -108,10 +131,24 @@ describe('Coffee Controller', () => {
             expect(result).toEqual(next);
         });
 
-        // TODO error handling test case
-        // it('should send a 500 when coffeeDao throws an error', async () => {
-        //
-        // });
+        it('should send a 500 when coffeeDao throws an error', async () => {
+            createCoffee.mockImplementationOnce(() => {
+                throw new Error('Some horrible error');
+            });
+
+            req = {
+                body: { name: 'Brazilian Love Affair', roasterId: 1, url: 'https://200degs.com/collections/coffee-beans/products/brazilian-love-affair', roastType: 'dark', bestFor: 'espresso', origin: 'blend', country: 'United Kingdom' }
+            };
+            res.status.mockReturnValue(res);
+            res.send.mockReturnValue(res);
+
+            const result = await createCoffeeController(req, res, next);
+
+            expect(res.status).toHaveBeenCalledTimes(1);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
+        });
     });
 
     describe('createCoffeeAndRoasterController', () => {
@@ -167,6 +204,46 @@ describe('Coffee Controller', () => {
             expect(createCoffee).not.toHaveBeenCalled();
             expect(next).toHaveBeenCalledTimes(1);
             expect(result).toEqual(next);
+        });
+
+        it('should send a 500 when roasterDao throws an error', async () => {
+            createRoaster.mockImplementationOnce(() => {
+                throw new Error('Some horrible error');
+            });
+
+            const coffee = { name: 'Brazilian Love Affair', url: 'https://200degs.com/collections/coffee-beans/products/brazilian-love-affair', roastType: 'dark', bestFor: 'espresso', origin: 'blend', country: 'United Kingdom' };
+            const roaster = { name: '200 Degrees', url: 'https://200degs.com', country: 'United Kingdom' };
+
+            req = { body: { coffee, roaster } };
+            res.status.mockReturnValue(res);
+            res.send.mockReturnValue(res);
+
+            const result = await createCoffeeAndRoasterController(req, res, next);
+
+            expect(res.status).toHaveBeenCalledTimes(1);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
+        });
+
+        it('should send a 500 when coffeeDao throws an error', async () => {
+            createCoffee.mockImplementationOnce(() => {
+                throw new Error('Some horrible error');
+            });
+
+            const coffee = { name: 'Brazilian Love Affair', url: 'https://200degs.com/collections/coffee-beans/products/brazilian-love-affair', roastType: 'dark', bestFor: 'espresso', origin: 'blend', country: 'United Kingdom' };
+            const roaster = { name: '200 Degrees', url: 'https://200degs.com', country: 'United Kingdom' };
+
+            req = { body: { coffee, roaster } };
+            res.status.mockReturnValue(res);
+            res.send.mockReturnValue(res);
+
+            const result = await createCoffeeAndRoasterController(req, res, next);
+
+            expect(res.status).toHaveBeenCalledTimes(1);
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(res.send).toHaveBeenCalledTimes(1);
+            expect(result).toEqual(res);
         });
     });
 });
