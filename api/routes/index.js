@@ -1,5 +1,7 @@
 import express from 'express';
-import { healthController, getAllCoffeeController, getCoffeeByIdController, createCoffeeController, createCoffeeAndRoasterController, getAllRoastersController, getRoasterByIdController, createRoasterController } from '../controllers';
+import healthController from "../controllers/healthController.js";
+import { createCoffeeAndRoasterController, createCoffeeController, getAllCoffeeController, getCoffeeByIdController } from "../controllers/coffeeController.js";
+import { createRoasterController, getAllRoastersController, getRoasterByIdController } from "../controllers/roasterController.js";
 
 const router = express.Router();
 
