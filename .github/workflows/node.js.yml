@@ -11,6 +11,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./api
 
     strategy:
       matrix:
@@ -23,7 +27,5 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: |
-        cd ./api
-        npm ci
-        npm test
+    - run: npm ci
+    - run: npm test
